@@ -154,19 +154,74 @@ function setNewFaveColor(){
 // When user hovers over an employees name:
 // 	Hide the name if shown.
 // 	Show the name if hidden.
+const empList = document.getElementsByClassName('empName');
+for (let i =0; i < empList.length; i++) {
+    empList[i].setAttribute('onmouseover', 'toggleVisibility(event)');
+    empList[i].style.opacity = 1;
+}
+
+function toggleVisibility(event) {
+    event.cancelBubble = true;
+    if (event.srcElement.style.opacity == 1) { 
+        event.srcElement.style.opacity = 0;
+    }
+    else {
+        event.srcElement.style.opacity = 1;
+    }
+}
 
 // 10. Current Time
 // Regarding this element:
 // 	<h5 id="currentTime"></h5>
 // Show the current time in this element in this format: 9:05:23 AM
 // The time should be accurate to the second without having to reload the page.
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+  }
+let today = new Date();
+document.getElementById('currentTime').innerText 
+= today.getHours().pad(2) + ':' + today.getMinutes().pad(2) + ':' + today.getSeconds().pad(2);
+
+setInterval(() => {
+    let today = new Date();
+    document.getElementById('currentTime').innerText 
+    = today.getHours().pad(2) + ':' + today.getMinutes().pad(2) + ':' + today.getSeconds().pad(2);
+}, 1000)
 
 // 11. Delay
 // Regarding this element:
 // 	<p id="helloWorld">Hello, World!</p>
 // Three seconds after a user clicks on this element, change the text to a random color.
+const helloWorld = document.getElementById('helloWorld');
+helloWorld.setAttribute('onclick','scheduleColorChange()');
+
+function scheduleColorChange() {
+    setTimeout(() => {helloWorld.style.color = ('#'+(Math.random()*0xFFFFFF<<0).toString(16))},
+    3000);
+}
 
 // 12. Walk the DOM
 // Define function walkTheDOM(node, func)
 // This function should traverse every node in the DOM. Use recursion.
 // On each node, call func(node).
+function walkTheDOM(startingElement) {
+    let list;
+
+    if (!startingElement) {
+        list = document.getElementsByTagName('html');
+    }
+    else {
+        list = startingElement;
+    }
+      
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].children) {
+            const children = list[i].children;
+            walkTheDOM(children);
+        }
+        console.log(list[i]);
+    }
+  }
+  walkTheDOM();
